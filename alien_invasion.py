@@ -2,7 +2,7 @@ import sys
 import pygame
 from settings import Settings
 from ship import Ship
-
+import game_functions as gf
 
 def run_game():
     pygame.init()
@@ -16,7 +16,7 @@ def run_game():
     # 创建一艘飞船
     pygame.display.update()
     while True:
-
+        gf.check_events()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
