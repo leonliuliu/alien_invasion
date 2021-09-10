@@ -25,18 +25,8 @@ def run_game():
     while True:
         gf.check_events(ai_settings, screen, ship, bullets)
         ship.update()
-        bullets.update()
+        gf.update_bullets(bullets)
         gf.update_screen(ai_settings, screen, ship, bullets)
-    # for event in pygame.event.get():
-    #     if event.type == pygame.QUIT:
-    #         sys.exit()
-
-    # screen.fill(ai_settings.bg_color)  # 每次循环都绘制屏幕
-    # bg_color = (230,230,230) #背景加上颜色  代码的替换和调用
-    # ship.blitme()
-
-    # 让最近绘制的屏幕可见
-    # pygame.display.flip()
 
 
 run_game()
