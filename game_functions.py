@@ -1,6 +1,7 @@
 import sys
 import pygame
 from bullet import Bullet
+from alien import Alien
 
 
 def check_keydown_events(event, ai_settings, screen, ship, bullets):
@@ -12,6 +13,7 @@ def check_keydown_events(event, ai_settings, screen, ship, bullets):
 
 
     # 创建新子弹并将其加入编组bullets中
+
     elif event.key == pygame.K_SPACE:
         fire_bullet(ai_settings, screen, ship, bullets)
 
@@ -40,7 +42,7 @@ def check_events(ai_settings, screen, ship, bullets):
             check_keyup_events(event, ship)
 
 
-def update_screen(ai_settings, screen, ship, alien,bullets):
+def update_screen(ai_settings, screen, ship, aliens, bullets):
     # 更新屏幕的图像，并切换到新的屏幕中
     # 每次循环都重新绘制屏幕
     screen.fill(ai_settings.bg_color)
@@ -49,7 +51,7 @@ def update_screen(ai_settings, screen, ship, alien,bullets):
     for bullet in bullets.sprites():
         bullet.draw_bullet()
     ship.blitme()
-    alien.blitme()
+    aliens.draw(screen)
     # 让最新的屏幕可见
     pygame.display.flip()
 
@@ -71,3 +73,31 @@ def fire_bullet(ai_settings, screen, ship, bullets):
     if len(bullets) < ai_settings.bullets_allowed:
         new_bullet = Bullet(ai_settings, screen, ship)
         bullets.add(new_bullet)
+
+
+def get_number_aliens_x(ai_settings, alien_width):
+    """"计算每行可容纳多少哥外星人"""
+    available_space_x = ai_settings.screen_width - 2 * alien_width
+    number_aliens_x = int(available_space_x / (2 * alien_width))
+    return number_aliens_x
+
+
+def create_alien(ai_settings, screen, aliens, alien_number):
+    """"创建一个外星儿并将其放在前行"""
+    alien = Alien(ai_settings, screen)
+    alien_width = alien.rect.width
+    alien.x = alien_width + 2 * alien_width * alien_number
+    alien.rect.x = alien.x
+    aliens.add(alien)
+
+
+def create_fleet(ai_settings, screen, aliens):
+    """"创建外星人群"""
+    # 创建一个外星人，并计算一行可以容纳多少个外星人
+    # 外星人的间距为外星人的宽度
+    alien = Alien(ai_settings, screen)
+    number_aliens_x = get_number_aliens_x(ai_settings, alien.rect.width)
+
+    # 创建第一行外星人
+    for alien_number in range(number_aliens_x):
+        create_alien(ai_settings, screen, aliens, alien_number)
